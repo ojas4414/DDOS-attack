@@ -1,0 +1,57 @@
+name: SentinelAPI CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_DB:       sentinelapi
+          POSTGRES_USER:     sentinel
+          POSTGRES_PASSWORD: sentinel123
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          pip install fastapi uvicorn psycopg2-binary \
+                      pyjwt torch numpy pytest pytest-asyncio httpx
+
+      - name: Run pytest
+        env:
+          DB_HOST:     localhost
+          DB_PORT:     5432
+          DB_NAME:     sentinelapi
+          DB_USER:     sentinel
+          DB_PASSWORD: sentinel123
+          JWT_SECRET:  test_secret
+          ADMIN_USER:  admin
+          ADMIN_PASS:  sentinel123
+        run: pytest tests/ -v
+
+      - name: Compile C++ interceptor
+        run: |
+          g++ -std=c++17 -o interceptor_bin cpp/interceptor.cpp
+          echo "C++ compilation successful"

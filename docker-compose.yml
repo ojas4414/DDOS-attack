@@ -1,0 +1,43 @@
+services:
+
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB:       sentinelapi
+      POSTGRES_USER:     sentinel
+      POSTGRES_PASSWORD: sentinel123
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sentinel -d sentinelapi"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build: .
+    command: uvicorn backend.main:app --host 0.0.0.0 --port 8000 --reload
+    # Mount source for live reload — edit backend/ or security/ and just
+    # refresh; no rebuild needed (uvicorn --reload handles the Python side).
+    volumes:
+      - ./backend:/app/backend
+      - ./security:/app/security
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=sentinelapi
+      - DB_USER=sentinel
+      - DB_PASSWORD=sentinel123
+      - JWT_SECRET=sentinel_dev_secret_change_in_prod_0001
+      - ADMIN_USER=admin
+      - ADMIN_PASS=sentinel123
+
+volumes:
+  pgdata:

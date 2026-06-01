@@ -1,0 +1,38 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.env
+venv/
+.venv/
+*.egg-info/
+dist/
+build/
+
+# Node / Frontend
+sentinel-dashboard/node_modules/
+sentinel-dashboard/dist/
+sentinel-dashboard/.vite/
+node_modules/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# Docker volumes (local only)
+pgdata/
+
+# Compiled C++
+cpp/*.o
+cpp/interceptor
+cpp/sentinel
+
+# Temp files
+ws_test.py
+*.pyc

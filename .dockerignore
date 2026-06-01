@@ -1,0 +1,10 @@
+sentinel-dashboard/
+cpp/
+.github/
+*.md
+index.html
+tests/
+__pycache__/
+**/__pycache__/
+*.pyc
+*.pyo
