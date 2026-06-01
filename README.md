@@ -303,11 +303,7 @@ tests/test_feature.py::test_unique_ip_count                 PASSED
 
 ---
 
-## 📝 Resume Line
 
-> Built **SentinelAPI** — real-time DDoS detection gateway. C++ packet interception layer with Trie-based O(4) IP blocking and 8-thread pool. 1D-CNN (PyTorch) classifies 10-window traffic sequences as normal/attack. Feature extraction via sliding window, min-heap top-K, and Shannon entropy. PostgreSQL ACID audit log with connection pooling. JWT-authenticated WebSocket streams live threat data to a React SOC dashboard. Containerized with Docker Compose. pytest suite.
-
----
 
 ## 👤 Author
 
